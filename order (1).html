@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Food Ordering System</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+* {
+margin: 0;
+padding: 0;
+box-sizing: border-box;
+}
+
+body {
+font-family: 'DM Sans', sans-serif;
+background-color: #2C3E50; /* Dark blue */
+color: #333;
+padding: 0;
+margin: 0;
+}
+
+.container {
+max-width: 1200px;
+margin: 0 auto;
+padding: 50px;
+background-color: #F4E1C1; /* Beige */
+border-radius: 12px;
+box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+transition: transform 0.3s ease;
+}
+
+h1 {
+text-align: center;
+color: #2C3E50; /* Dark blue */
+font-size: 36px;
+margin-bottom: 30px;
+}
+
+.menu {
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+gap: 30px;
+}
+
+.menu-item {
+background-color: #fff;
+border-radius: 8px;
+padding: 20px;
+box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+transition: transform 0.2s ease, box-shadow 0.3s ease;
+}
+
+.menu-item:hover {
+transform: translateY(-8px);
+box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.item-name {
+font-size: 20px;
+font-weight: bold;
+color: #2C3E50; /* Dark blue */
+margin-bottom: 10px;
+}
+
+.item-price {
+font-size: 18px;
+color: #888;
+margin-bottom: 15px;
+}
+
+.add-to-cart {
+padding: 12px 25px;
+background-color: #2C3E50; /* Dark blue */
+color: white;
+border: none;
+border-radius: 5px;
+cursor: pointer;
+font-size: 16px;
+transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.add-to-cart:hover {
+background-color: #1A2632; /* Darker blue */
+transform: scale(1.05);
+}
+
+.cart {
+margin-top: 50px;
+border-top: 2px solid #e2e2e2;
+padding-top: 30px;
+}
+
+.cart-items {
+margin-bottom: 30px;
+}
+
+.cart-item {
+display: flex;
+justify-content: space-between;
+font-size: 18px;
+margin-bottom: 12px;
+}
+
+.total-price {
+text-align: right;
+font-size: 22px;
+font-weight: bold;
+color: #2C3E50; /* Dark blue */
+margin-bottom: 25px;
+}
+
+.order-details {
+display: flex;
+flex-direction: column;
+margin-top: 30px;
+gap: 15px;
+}
+
+.order-details input,
+.order-details select {
+padding: 12px;
+border-radius: 8px;
+border: 1px solid #ddd;
+font-size: 16px;
+transition: border-color 0.3s ease;
+}
+
+.order-details input:focus,
+.order-details select:focus {
+border-color: #2C3E50; /* Dark blue */
+}
+
+.order-details button {
+padding: 14px 30px;
+background-color: #2C3E50; /* Dark blue */
+color: white;
+border: none;
+border-radius: 8px;
+font-size: 18px;
+cursor: pointer;
+transition: background-color 0.3s ease;
+}
+
+.order-details button:hover {
+background-color: #1A2632; /* Darker blue */
+}
+
+.fake-purchase {
+display: none;
+text-align: center;
+padding: 50px 30px;
+background-color: #2C3E50; /* Dark blue */
+color: white;
+border-radius: 12px;
+box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+margin-top: 40px;
+animation: fadeIn 1s ease-in-out;
+}
+
+.fake-purchase.show {
+display: block;
+}
+
+@keyframes fadeIn {
+0% { opacity: 0; }
+100% { opacity: 1; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+<h1>Food Ordering System</h1>
+
+<!-- Menu Items -->
+<div class="menu">
+<!-- Legendary Wraps -->
+<div class="menu-item" data-price="16.90">
+<div class="item-name">Falafel Wrap</div>
+<div class="item-price">$16.90</div>
+<button class="add-to-cart">Add to Cart</button>
+</div>
+<div class="menu-item" data-price="16.90">
+<div class="item-name">Portuguese Chicken Wrap</div>
+<div class="item-price">$16.90</div>
+<button class="add-to-cart">Add to Cart</button>
+</div>
+
+<!-- Burgers -->
+<div class="menu-item" data-price="18.00">
+<div class="item-name">Wagyu Beef Classic Burger</div>
+<div class="item-price">$18.00</div>
+<button class="add-to-cart">Add to Cart</button>
+</div>
+<div class="menu-item" data-price="18.00">
+<div class="item-name">V2 Burger</div>
+<div class="item-price">$18.00</div>
+<button class="add-to-cart">Add to Cart</button>
+</div>
+
+<!-- Tapas/ Share Plates -->
+<div class="menu-item" data-price="19.90">
+<div class="item-name">Szechuan Squid</div>
+<div class="item-price">$19.90</div>
+<button class="add-to-cart">Add to Cart</button>
+</div>
+<div class="menu-item" data-price="19.90">
+<div class="item-name">White Truffled Trio Arancini</div>
+<div class="item-price">$19.90</div>
+<button class="add-to-cart">Add to Cart</button>
+</div>
+
+<!-- Chips / Fries -->
+<div class="menu-item" data-price="10.00">
+<div class="item-name">Sweet Potato Fries</div>
+<div class="item-price">$10.00</div>
+<button class="add-to-cart">Add to Cart</button>
+</div>
+
+<!-- Specialty Coffee -->
+<div class="menu-item" data-price="3.50">
+<div class="item-name">Espresso</div>
+<div class="item-price">$3.50</div>
+<button class="add-to-cart">Add to Cart</button>
+</div>
+
+<!-- Juices and Beverages -->
+<div class="menu-item" data-price="6.00">
+<div class="item-name">Kombucha</div>
+<div class="item-price">$6.00</div>
+<button class="add-to-cart">Add to Cart</button>
+</div>
+<div class="menu-item" data-price="4.00">
+<div class="item-name">Apple or Orange Juice</div>
+<div class="item-price">$4.00</div>
+<button class="add-to-cart">Add to Cart</button>
+</div>
+
+<!-- Smoothies -->
+<div class="menu-item" data-price="9.00">
+<div class="item-name">Acai, Coconut Water</div>
+<div class="item-price">$9.00</div>
+<button class="add-to-cart">Add to Cart</button>
+</div>
+</div>
+
+<!-- Cart -->
+<div class="cart">
+<h2>Your Cart</h2>
+<div class="cart-items"></div>
+<div class="total-price">Total: $0</div>
+</div>
+
+<!-- Order Details -->
+<div class="order-details">
+<input type="text" id="customer-name" placeholder="Your Name" />
+<select id="pickup-time">
+<option value="">Select Pickup Time</option>
+<option value="16:00">8:00 AM</option>
+<option value="17:00">9:00 AM</option>
+<option value="15:00">10:00AM</option>
+<option value="16:00">12:00PM</option>
+<option value="17:00">1:00 PM</option>
+<option value="15:00">2:00 PM</option>
+</select>
+<button id="place-order">Place Order</button>
+</div>
+
+<!-- Fake Purchase Confirmation -->
+<div class="fake-purchase" id="purchase-confirmation">
+<h3>Thank you for your order!</h3>
+<p>Your order will be ready for pickup at <span id="pickup-time-display"></span>.</p>
+<p>":)"</p>
+</div>
+</div>
+
+<script>
+let cart = [];
+let totalPrice = 0;
+
+// Add items to the cart
+const addToCartButtons = document.querySelectorAll('.add-to-cart');
+addToCartButtons.forEach(button => {
+button.addEventListener('click', () => {
+const itemElement = button.closest('.menu-item');
+const itemName = itemElement.querySelector('.item-name').textContent;
+const itemPrice = parseFloat(itemElement.getAttribute('data-price'));
+
+cart.push({ name: itemName, price: itemPrice });
+totalPrice += itemPrice;
+updateCart();
+});
+});
+
+// Update the cart display
+function updateCart() {
+const cartItemsContainer = document.querySelector('.cart-items');
+cartItemsContainer.innerHTML = '';
+cart.forEach(item => {
+const cartItem = document.createElement('div');
+cartItem.classList.add('cart-item');
+cartItem.innerHTML = `${item.name} - $${item.price}`;
+cartItemsContainer.appendChild(cartItem);
+});
+
+const totalElement = document.querySelector('.total-price');
+totalElement.textContent = `Total: $${totalPrice.toFixed(2)}`;
+}
+
+// Handle the order submission
+const placeOrderButton = document.getElementById('place-order');
+placeOrderButton.addEventListener('click', () => {
+const name = document.getElementById('customer-name').value;
+const pickupTime = document.getElementById('pickup-time').value;
+
+if (name && pickupTime && cart.length > 0) {
+document.getElementById('pickup-time-display').textContent = pickupTime;
+document.getElementById('purchase-confirmation').classList.add('show');
+resetOrder();
+} else {
+alert('Please complete all fields before placing the order!');
+}
+});
+
+// Reset the order
+function resetOrder() {
+cart = [];
+totalPrice = 0;
+updateCart();
+document.getElementById('customer-name').value = '';
+document.getElementById('pickup-time').value = '';
+}
+</script>
+
+
+<script src="https://static.app/js/static.js" type="text/javascript"></script>
+</body>
+</html>
