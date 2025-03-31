@@ -1,336 +1,553 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Food Ordering System</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
-<style>
-* {
-margin: 0;
-padding: 0;
-box-sizing: border-box;
-}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Food Ordering & Reviews</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-body {
-font-family: 'DM Sans', sans-serif;
-background-color: #2C3E50; /* Dark blue */
-color: #333;
-padding: 0;
-margin: 0;
-}
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background-color: #2C3E50;
+      color: #333;
+      padding: 0;
+      margin: 0;
+    }
 
-.container {
-max-width: 1200px;
-margin: 0 auto;
-padding: 50px;
-background-color: #F4E1C1; /* Beige */
-border-radius: 12px;
-box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-transition: transform 0.3s ease;
-}
+    .page {
+      display: none;
+    }
 
-h1 {
-text-align: center;
-color: #2C3E50; /* Dark blue */
-font-size: 36px;
-margin-bottom: 30px;
-}
+    .page.active {
+      display: block;
+    }
 
-.menu {
-display: grid;
-grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-gap: 30px;
-}
+    /* Common Styles */
+    .container {
+      max-width: 1200px;
+      margin: 50px auto;
+      padding: 30px;
+      background-color: #F4E1C1;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    }
 
-.menu-item {
-background-color: #fff;
-border-radius: 8px;
-padding: 20px;
-box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
-transition: transform 0.2s ease, box-shadow 0.3s ease;
-}
+    h1 {
+      text-align: center;
+      color: #2C3E50;
+      font-size: 36px;
+      margin-bottom: 30px;
+    }
 
-.menu-item:hover {
-transform: translateY(-8px);
-box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
-}
+    /* Food Ordering System Styles */
+    .menu {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 30px;
+      margin-bottom: 40px;
+    }
 
-.item-name {
-font-size: 20px;
-font-weight: bold;
-color: #2C3E50; /* Dark blue */
-margin-bottom: 10px;
-}
+    .menu-item {
+      background-color: #fff;
+      border-radius: 8px;
+      padding: 20px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease, box-shadow 0.3s ease;
+    }
 
-.item-price {
-font-size: 18px;
-color: #888;
-margin-bottom: 15px;
-}
+    .menu-item:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+    }
 
-.add-to-cart {
-padding: 12px 25px;
-background-color: #2C3E50; /* Dark blue */
-color: white;
-border: none;
-border-radius: 5px;
-cursor: pointer;
-font-size: 16px;
-transition: background-color 0.3s ease, transform 0.2s ease;
-}
+    .item-name {
+      font-size: 20px;
+      font-weight: bold;
+      color: #2C3E50;
+      margin-bottom: 10px;
+    }
 
-.add-to-cart:hover {
-background-color: #1A2632; /* Darker blue */
-transform: scale(1.05);
-}
+    .item-price {
+      font-size: 18px;
+      color: #888;
+      margin-bottom: 15px;
+    }
 
-.cart {
-margin-top: 50px;
-border-top: 2px solid #e2e2e2;
-padding-top: 30px;
-}
+    .add-to-cart {
+      padding: 12px 25px;
+      background-color: #2C3E50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease, transform 0.2s ease;
+      width: 100%;
+    }
 
-.cart-items {
-margin-bottom: 30px;
-}
+    .add-to-cart:hover {
+      background-color: #1A2632;
+      transform: scale(1.05);
+    }
 
-.cart-item {
-display: flex;
-justify-content: space-between;
-font-size: 18px;
-margin-bottom: 12px;
-}
+    .cart {
+      margin-top: 50px;
+      border-top: 2px solid #e2e2e2;
+      padding-top: 30px;
+    }
 
-.total-price {
-text-align: right;
-font-size: 22px;
-font-weight: bold;
-color: #2C3E50; /* Dark blue */
-margin-bottom: 25px;
-}
+    .cart h2 {
+      margin-bottom: 20px;
+      color: #2C3E50;
+    }
 
-.order-details {
-display: flex;
-flex-direction: column;
-margin-top: 30px;
-gap: 15px;
-}
+    .cart-items {
+      margin-bottom: 30px;
+    }
 
-.order-details input,
-.order-details select {
-padding: 12px;
-border-radius: 8px;
-border: 1px solid #ddd;
-font-size: 16px;
-transition: border-color 0.3s ease;
-}
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      font-size: 18px;
+      margin-bottom: 12px;
+      padding: 10px;
+      background-color: white;
+      border-radius: 5px;
+    }
 
-.order-details input:focus,
-.order-details select:focus {
-border-color: #2C3E50; /* Dark blue */
-}
+    .total-price {
+      text-align: right;
+      font-size: 22px;
+      font-weight: bold;
+      color: #2C3E50;
+      margin-bottom: 25px;
+    }
 
-.order-details button {
-padding: 14px 30px;
-background-color: #2C3E50; /* Dark blue */
-color: white;
-border: none;
-border-radius: 8px;
-font-size: 18px;
-cursor: pointer;
-transition: background-color 0.3s ease;
-}
+    .order-details {
+      display: flex;
+      flex-direction: column;
+      margin-top: 30px;
+      gap: 15px;
+    }
 
-.order-details button:hover {
-background-color: #1A2632; /* Darker blue */
-}
+    .order-details input,
+    .order-details select {
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      font-size: 16px;
+      transition: border-color 0.3s ease;
+    }
 
-.fake-purchase {
-display: none;
-text-align: center;
-padding: 50px 30px;
-background-color: #2C3E50; /* Dark blue */
-color: white;
-border-radius: 12px;
-box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
-margin-top: 40px;
-animation: fadeIn 1s ease-in-out;
-}
+    .order-details input:focus,
+    .order-details select:focus {
+      border-color: #2C3E50;
+      outline: none;
+    }
 
-.fake-purchase.show {
-display: block;
-}
+    .order-details button {
+      padding: 14px 30px;
+      background-color: #2C3E50;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
 
-@keyframes fadeIn {
-0% { opacity: 0; }
-100% { opacity: 1; }
-}
-</style>
+    .order-details button:hover {
+      background-color: #1A2632;
+    }
+
+    .fake-purchase {
+      display: none;
+      text-align: center;
+      padding: 50px 30px;
+      background-color: #2C3E50;
+      color: white;
+      border-radius: 12px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      margin-top: 40px;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .fake-purchase.show {
+      display: block;
+    }
+
+    /* Customer Reviews Styles */
+    .review {
+      background-color: #fff;
+      padding: 15px;
+      border-radius: 8px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+      margin-bottom: 15px;
+    }
+
+    .review strong {
+      color: #2C3E50;
+      display: block;
+      font-size: 18px;
+      margin-bottom: 5px;
+    }
+
+    .stars {
+      color: #FFD700;
+      margin-bottom: 5px;
+    }
+
+    .review-form {
+      margin-top: 20px;
+    }
+
+    .review-form textarea {
+      width: 100%;
+      height: 100px;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      font-size: 16px;
+      resize: none;
+      margin-bottom: 15px;
+    }
+
+    .star-rating {
+      display: flex;
+      justify-content: center;
+      flex-direction: row-reverse;
+      margin: 10px 0;
+    }
+
+    .star-rating input {
+      display: none;
+    }
+
+    .star-rating label {
+      font-size: 24px;
+      color: #ccc;
+      cursor: pointer;
+      padding: 0 5px;
+    }
+
+    .star-rating input:checked ~ label,
+    .star-rating label:hover,
+    .star-rating label:hover ~ label {
+      color: #FFD700;
+    }
+
+    .review-form button {
+      display: block;
+      width: 100%;
+      margin-top: 10px;
+      padding: 12px 20px;
+      background-color: #2C3E50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+    }
+
+    .review-form button:hover {
+      background-color: #1A2632;
+    }
+
+    .thank-you-popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+      z-index: 1000;
+    }
+
+    .thank-you-popup.show {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px;
+        margin: 20px;
+      }
+      
+      .menu {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<div class="container">
-<h1>Food Ordering System</h1>
+<!-- Food Ordering System Page -->
+<div id="orderPage" class="page">
+  <div class="container">
+    <h1>Food Ordering System</h1>
+    
+    <!-- Menu Items -->
+    <div class="menu">
+      <!-- Legendary Wraps -->
+      <div class="menu-item" data-price="16.90">
+        <div class="item-name">Falafel Wrap</div>
+        <div class="item-price">$16.90</div>
+        <button class="add-to-cart">Add to Cart</button>
+      </div>
+      <div class="menu-item" data-price="16.90">
+        <div class="item-name">Portuguese Chicken Wrap</div>
+        <div class="item-price">$16.90</div>
+        <button class="add-to-cart">Add to Cart</button>
+      </div>
+      
+      <!-- Burgers -->
+      <div class="menu-item" data-price="18.00">
+        <div class="item-name">Wagyu Beef Classic Burger</div>
+        <div class="item-price">$18.00</div>
+        <button class="add-to-cart">Add to Cart</button>
+      </div>
+      <div class="menu-item" data-price="18.00">
+        <div class="item-name">V2 Burger</div>
+        <div class="item-price">$18.00</div>
+        <button class="add-to-cart">Add to Cart</button>
+      </div>
+      
+      <!-- Tapas/ Share Plates -->
+      <div class="menu-item" data-price="19.90">
+        <div class="item-name">Szechuan Squid</div>
+        <div class="item-price">$19.90</div>
+        <button class="add-to-cart">Add to Cart</button>
+      </div>
+      <div class="menu-item" data-price="19.90">
+        <div class="item-name">White Truffled Trio Arancini</div>
+        <div class="item-price">$19.90</div>
+        <button class="add-to-cart">Add to Cart</button>
+      </div>
+      
+      <!-- Chips / Fries -->
+      <div class="menu-item" data-price="10.00">
+        <div class="item-name">Sweet Potato Fries</div>
+        <div class="item-price">$10.00</div>
+        <button class="add-to-cart">Add to Cart</button>
+      </div>
+      
+      <!-- Specialty Coffee -->
+      <div class="menu-item" data-price="3.50">
+        <div class="item-name">Espresso</div>
+        <div class="item-price">$3.50</div>
+        <button class="add-to-cart">Add to Cart</button>
+      </div>
+      
+      <!-- Juices and Beverages -->
+      <div class="menu-item" data-price="6.00">
+        <div class="item-name">Kombucha</div>
+        <div class="item-price">$6.00</div>
+        <button class="add-to-cart">Add to Cart</button>
+      </div>
+      <div class="menu-item" data-price="4.00">
+        <div class="item-name">Apple or Orange Juice</div>
+        <div class="item-price">$4.00</div>
+        <button class="add-to-cart">Add to Cart</button>
+      </div>
+      
+      <!-- Smoothies -->
+      <div class="menu-item" data-price="9.00">
+        <div class="item-name">Acai, Coconut Water</div>
+        <div class="item-price">$9.00</div>
+        <button class="add-to-cart">Add to Cart</button>
+      </div>
+    </div>
+    
+    <!-- Cart -->
+    <div class="cart">
+      <h2>Your Cart</h2>
+      <div class="cart-items"></div>
+      <div class="total-price">Total: $0</div>
+    </div>
+    
+    <!-- Order Details -->
+    <div class="order-details">
+      <input type="text" id="customer-name" placeholder="Your Name" />
+      <select id="pickup-time">
+        <option value="">Select Pickup Time</option>
+        <option value="8:00 AM">8:00 AM</option>
+        <option value="9:00 AM">9:00 AM</option>
+        <option value="10:00 AM">10:00 AM</option>
+        <option value="12:00 PM">12:00 PM</option>
+        <option value="1:00 PM">1:00 PM</option>
+        <option value="2:00 PM">2:00 PM</option>
+      </select>
+      <button id="place-order">Place Order</button>
+    </div>
+    
+    <!-- Fake Purchase Confirmation -->
+    <div class="fake-purchase" id="purchase-confirmation">
+      <h3>Thank you for your order!</h3>
+      <p>Your order will be ready for pickup at <span id="pickup-time-display"></span>.</p>
+      <p>:)</p>
+    </div>
+  </div>
+</div>
 
-<!-- Menu Items -->
-<div class="menu">
-<!-- Legendary Wraps -->
-<div class="menu-item" data-price="16.90">
-<div class="item-name">Falafel Wrap</div>
-<div class="item-price">$16.90</div>
-<button class="add-to-cart">Add to Cart</button>
-</div>
-<div class="menu-item" data-price="16.90">
-<div class="item-name">Portuguese Chicken Wrap</div>
-<div class="item-price">$16.90</div>
-<button class="add-to-cart">Add to Cart</button>
-</div>
-
-<!-- Burgers -->
-<div class="menu-item" data-price="18.00">
-<div class="item-name">Wagyu Beef Classic Burger</div>
-<div class="item-price">$18.00</div>
-<button class="add-to-cart">Add to Cart</button>
-</div>
-<div class="menu-item" data-price="18.00">
-<div class="item-name">V2 Burger</div>
-<div class="item-price">$18.00</div>
-<button class="add-to-cart">Add to Cart</button>
-</div>
-
-<!-- Tapas/ Share Plates -->
-<div class="menu-item" data-price="19.90">
-<div class="item-name">Szechuan Squid</div>
-<div class="item-price">$19.90</div>
-<button class="add-to-cart">Add to Cart</button>
-</div>
-<div class="menu-item" data-price="19.90">
-<div class="item-name">White Truffled Trio Arancini</div>
-<div class="item-price">$19.90</div>
-<button class="add-to-cart">Add to Cart</button>
-</div>
-
-<!-- Chips / Fries -->
-<div class="menu-item" data-price="10.00">
-<div class="item-name">Sweet Potato Fries</div>
-<div class="item-price">$10.00</div>
-<button class="add-to-cart">Add to Cart</button>
-</div>
-
-<!-- Specialty Coffee -->
-<div class="menu-item" data-price="3.50">
-<div class="item-name">Espresso</div>
-<div class="item-price">$3.50</div>
-<button class="add-to-cart">Add to Cart</button>
-</div>
-
-<!-- Juices and Beverages -->
-<div class="menu-item" data-price="6.00">
-<div class="item-name">Kombucha</div>
-<div class="item-price">$6.00</div>
-<button class="add-to-cart">Add to Cart</button>
-</div>
-<div class="menu-item" data-price="4.00">
-<div class="item-name">Apple or Orange Juice</div>
-<div class="item-price">$4.00</div>
-<button class="add-to-cart">Add to Cart</button>
-</div>
-
-<!-- Smoothies -->
-<div class="menu-item" data-price="9.00">
-<div class="item-name">Acai, Coconut Water</div>
-<div class="item-price">$9.00</div>
-<button class="add-to-cart">Add to Cart</button>
-</div>
-</div>
-
-<!-- Cart -->
-<div class="cart">
-<h2>Your Cart</h2>
-<div class="cart-items"></div>
-<div class="total-price">Total: $0</div>
-</div>
-
-<!-- Order Details -->
-<div class="order-details">
-<input type="text" id="customer-name" placeholder="Your Name" />
-<select id="pickup-time">
-<option value="">Select Pickup Time</option>
-<option value="16:00">8:00 AM</option>
-<option value="17:00">9:00 AM</option>
-<option value="15:00">10:00AM</option>
-<option value="16:00">12:00PM</option>
-<option value="17:00">1:00 PM</option>
-<option value="15:00">2:00 PM</option>
-</select>
-<button id="place-order">Place Order</button>
-</div>
-
-<!-- Fake Purchase Confirmation -->
-<div class="fake-purchase" id="purchase-confirmation">
-<h3>Thank you for your order!</h3>
-<p>Your order will be ready for pickup at <span id="pickup-time-display"></span>.</p>
-<p>":)"</p>
-</div>
+<!-- Customer Reviews Page -->
+<div id="reviewsPage" class="page">
+  <div class="container">
+    <h1>Customer Reviews</h1>
+    
+    <div id="reviews">
+      <div class="review"><strong>John D.</strong><div class="stars">★★★★★</div> The food was amazing and the service was top-notch!</div>
+      <div class="review"><strong>Sarah L.</strong><div class="stars">★★★★★</div> Absolutely loved the ambiance and the delicious dishes.</div>
+      <div class="review"><strong>Michael B.</strong><div class="stars">★★★★☆</div> Great place! Highly recommend the burgers and wraps.</div>
+      <div class="review"><strong>Emma R.</strong><div class="stars">★★★★★</div> Excellent service and fresh ingredients. Will be back!</div>
+      <div class="review"><strong>Chris P.</strong><div class="stars">★★★★☆</div> Best dining experience I've had in a long time!</div>
+    </div>
+    
+    <div class="review-form" id="review-form">
+      <div class="star-rating">
+        <input type="radio" name="rating" id="star5" value="★★★★★"><label for="star5">★</label>
+        <input type="radio" name="rating" id="star4" value="★★★★☆"><label for="star4">★</label>
+        <input type="radio" name="rating" id="star3" value="★★★☆☆"><label for="star3">★</label>
+        <input type="radio" name="rating" id="star2" value="★★☆☆☆"><label for="star2">★</label>
+        <input type="radio" name="rating" id="star1" value="★☆☆☆☆"><label for="star1">★</label>
+      </div>
+      <textarea id="review-text" placeholder="Write your review..."></textarea>
+      <button id="submit-review">Submit Review</button>
+    </div>
+  </div>
+  
+  <div class="thank-you-popup" id="thank-you-popup">Thank you for your review!</div>
 </div>
 
 <script>
-let cart = [];
-let totalPrice = 0;
-
-// Add items to the cart
-const addToCartButtons = document.querySelectorAll('.add-to-cart');
-addToCartButtons.forEach(button => {
-button.addEventListener('click', () => {
-const itemElement = button.closest('.menu-item');
-const itemName = itemElement.querySelector('.item-name').textContent;
-const itemPrice = parseFloat(itemElement.getAttribute('data-price'));
-
-cart.push({ name: itemName, price: itemPrice });
-totalPrice += itemPrice;
-updateCart();
-});
-});
-
-// Update the cart display
-function updateCart() {
-const cartItemsContainer = document.querySelector('.cart-items');
-cartItemsContainer.innerHTML = '';
-cart.forEach(item => {
-const cartItem = document.createElement('div');
-cartItem.classList.add('cart-item');
-cartItem.innerHTML = `${item.name} - $${item.price}`;
-cartItemsContainer.appendChild(cartItem);
-});
-
-const totalElement = document.querySelector('.total-price');
-totalElement.textContent = `Total: $${totalPrice.toFixed(2)}`;
-}
-
-// Handle the order submission
-const placeOrderButton = document.getElementById('place-order');
-placeOrderButton.addEventListener('click', () => {
-const name = document.getElementById('customer-name').value;
-const pickupTime = document.getElementById('pickup-time').value;
-
-if (name && pickupTime && cart.length > 0) {
-document.getElementById('pickup-time-display').textContent = pickupTime;
-document.getElementById('purchase-confirmation').classList.add('show');
-resetOrder();
-} else {
-alert('Please complete all fields before placing the order!');
-}
-});
-
-// Reset the order
-function resetOrder() {
-cart = [];
-totalPrice = 0;
-updateCart();
-document.getElementById('customer-name').value = '';
-document.getElementById('pickup-time').value = '';
-}
+  // Hash-based routing
+  function handleRouting() {
+    const hash = window.location.hash.replace('#/', '') || 'order';
+    
+    // Hide all pages
+    document.querySelectorAll('.page').forEach(page => {
+      page.classList.remove('active');
+    });
+    
+    // Show the current page
+    if (hash === 'reviews') {
+      document.getElementById('reviewsPage').classList.add('active');
+    } else {
+      document.getElementById('orderPage').classList.add('active');
+    }
+  }
+  
+  // Initial routing
+  handleRouting();
+  
+  // Listen for hash changes
+  window.addEventListener('hashchange', handleRouting);
+  
+  // Food Ordering System Logic
+  let cart = [];
+  let totalPrice = 0;
+  
+  // Add items to the cart
+  const addToCartButtons = document.querySelectorAll('.add-to-cart');
+  addToCartButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      const itemElement = button.closest('.menu-item');
+      const itemName = itemElement.querySelector('.item-name').textContent;
+      const itemPrice = parseFloat(itemElement.getAttribute('data-price'));
+      
+      cart.push({ name: itemName, price: itemPrice });
+      totalPrice += itemPrice;
+      updateCart();
+    });
+  });
+  
+  // Update the cart display
+  function updateCart() {
+    const cartItemsContainer = document.querySelector('.cart-items');
+    cartItemsContainer.innerHTML = '';
+    cart.forEach(item => {
+      const cartItem = document.createElement('div');
+      cartItem.classList.add('cart-item');
+      cartItem.innerHTML = `${item.name} - $${item.price.toFixed(2)}`;
+      cartItemsContainer.appendChild(cartItem);
+    });
+    
+    const totalElement = document.querySelector('.total-price');
+    totalElement.textContent = `Total: $${totalPrice.toFixed(2)}`;
+  }
+  
+  // Handle the order submission
+  const placeOrderButton = document.getElementById('place-order');
+  placeOrderButton.addEventListener('click', () => {
+    const name = document.getElementById('customer-name').value;
+    const pickupTime = document.getElementById('pickup-time').value;
+    
+    if (name && pickupTime && cart.length > 0) {
+      document.getElementById('pickup-time-display').textContent = pickupTime;
+      document.getElementById('purchase-confirmation').classList.add('show');
+      
+      // Reset order after 3 seconds
+      setTimeout(() => {
+        document.getElementById('purchase-confirmation').classList.remove('show');
+        cart = [];
+        totalPrice = 0;
+        updateCart();
+        document.getElementById('customer-name').value = '';
+        document.getElementById('pickup-time').value = '';
+      }, 3000);
+    } else {
+      alert('Please complete all fields before placing the order!');
+    }
+  });
+  
+  // Customer Reviews Logic
+  let reviewSubmitted = false;
+  
+  // Handle review submission
+  const submitReviewButton = document.getElementById('submit-review');
+  submitReviewButton.addEventListener('click', () => {
+    const reviewText = document.getElementById('review-text').value;
+    const rating = document.querySelector('input[name="rating"]:checked');
+    
+    if (reviewText.trim() !== '' && rating) {
+      const reviewsContainer = document.getElementById('reviews');
+      const newReview = document.createElement('div');
+      newReview.classList.add('review');
+      newReview.innerHTML = `<strong>You</strong><div class="stars">${rating.value}</div> ${reviewText}`;
+      reviewsContainer.appendChild(newReview);
+      
+      document.getElementById('review-form').style.display = 'none';
+      document.getElementById('thank-you-popup').style.display = 'block';
+      
+      submitReviewButton.style.backgroundColor = '#555';
+      submitReviewButton.textContent = 'Review Already Placed';
+      submitReviewButton.disabled = true;
+      reviewSubmitted = true;
+      
+      setTimeout(() => {
+        document.getElementById('thank-you-popup').style.display = 'none';
+      }, 2000);
+    } else {
+      alert('Please enter a review and select a star rating before submitting.');
+    }
+  });
 </script>
+
 </body>
 </html>
